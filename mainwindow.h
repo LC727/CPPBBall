@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "renderarea.h"
+#include "model.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -21,11 +22,12 @@ public:
 private:
     Ui::MainWindow *ui;
     RenderArea *renderArea;
+    Model *model;
 
 private slots:
     void shapeChanged();
     void penChanged();
     void brushChanged();
-    void animate();
+    void step();
 };
 #endif // MAINWINDOW_H

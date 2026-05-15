@@ -6,6 +6,7 @@ RenderArea::RenderArea(QWidget *parent)
     antialiased = false;
     transformed = false;
     pixmap.load(":/images/qt-logo.png");
+    this->ballRadius = 30;
 
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(false);
@@ -51,21 +52,46 @@ void RenderArea::setTransformed(bool transformed)
     update();
 }
 
+void RenderArea::setBallPos(const QPoint newPos){
+    this->ballPos = newPos;
+    update();
+}
 
+
+void RenderArea::setFrameVertices(std::vector<QPoint> newVertices){
+    this->frameVertices = newVertices;
+    update();
+}
+
+void RenderArea::drawBall(QPainter* painter){
+    int r = this->ballRadius;
+    //printf("Ball radius is: %i\n",r);
+    QRect ball(this->ballPos, QSize(r,r));
+    //printf("Ball is set to: %i, %i\n",this->ballPos.x(),this->ballPos.y());
+
+    Qt::BrushStyle style = Qt::BrushStyle::Dense1Pattern;
+    painter->setBrush(QBrush(Qt::red, style));
+    painter->drawEllipse(ball);
+}
+
+void RenderArea::drawFrame(QPainter* painter){
+
+}
 
 void RenderArea::paintEvent(QPaintEvent * /* event */)
 {
-    QRect frame(100, 50, 200, 100);
-    QRect ball(190,90, 20, 20);
+    QRect frame(0, 0, width(), height());
+    //printf("Frame size: %i, %i",width(),height());
 
     QPainter painter(this);
+    Qt::BrushStyle style = Qt::BrushStyle::Dense1Pattern;
     painter.setPen(pen);
-    painter.setBrush(brush);
+    painter.setBrush(QBrush(Qt::blue, style));
     if (antialiased)
         painter.setRenderHint(QPainter::Antialiasing, true);
 
     painter.drawRect(frame);
-    painter.drawEllipse(ball);
+    drawBall(&painter);
 
     painter.setRenderHint(QPainter::Antialiasing, false);
     painter.setPen(palette().dark().color());

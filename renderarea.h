@@ -5,6 +5,7 @@
 #include <QPen>
 #include <QPainter>
 #include <QPainterPath>
+#include "model.h"
 
 class RenderArea : public QWidget
 {
@@ -18,6 +19,9 @@ public:
 
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
+    void setBallPos(const QPoint newPos);
+    void setFrameVertices(std::vector<QPoint> newVertices);
+    void initialize(Model* model);
 
 public slots:
     void setShape(Shape shape);
@@ -25,8 +29,8 @@ public slots:
     void setBrush(const QBrush &brush);
     void setAntialiased(bool antialiased);
     void setTransformed(bool transformed);
-    void drawBall(const int x, const int y, const int r);
-    void drawFrame(const int n, const int angle);
+    void drawBall(QPainter* painter);
+    void drawFrame(QPainter* painter);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -38,5 +42,8 @@ private:
     bool antialiased;
     bool transformed;
     QPixmap pixmap;
+    QPoint ballPos;
+    int ballRadius;
+    std::vector<QPoint> frameVertices;
 };
 #endif // RENDERAREA_H

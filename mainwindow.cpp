@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QPainter>
 #include <QGridLayout>
-#include "windows.h"
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -10,11 +10,12 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     renderArea = new RenderArea;
+    model = new Model();
+    QTimer* timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, QOverload<>::of(&MainWindow::step));
     this->layout()->addWidget(renderArea);
     renderArea->update();
-    shapeChanged();
-    penChanged();
-    brushChanged();
+    timer->start(17);
 }
 
 void MainWindow::shapeChanged()
@@ -57,23 +58,21 @@ void MainWindow::brushChanged()
     } else if (style == Qt::TexturePattern) {
         renderArea->setBrush(QBrush(QPixmap(":/images/brick.png")));
     } else {
-        renderArea->setBrush(QBrush(Qt::green, style));
+        renderArea->setBrush(QBrush(Qt::white, style));
     }
 }
 
-void MainWindow::animate(){
-    int g = 10;
-    int x = 190;
-    int y = 90;
-    int dx = 5;
-    int dy = -30;
-    while (true){
-        QPoint ballPos(x, y);
-        x += dx;
-        y += dy;
-        dy += g;
-        Sleep(500);
-    }
+void MainWindow::step(){
+    model->step();
+    QPointF newPos = model->getBallPos();
+    printf("Setting ball position to: %i, %i\n",newPos.x(), newPos.y());
+    renderArea->setBallPos(newPos.toPoint());
+    std::vector<QPointF> newVerticesF = model->getFrameVertices();
+    std::vector<QPoint> newVertices;
+    for (QPointF vertex : newVerticesF){
+        newVertices.push_back(vertex.toPoint());
+        }
+    renderArea->setFrameVertices(newVertices);
 }
 
 MainWindow::~MainWindow()

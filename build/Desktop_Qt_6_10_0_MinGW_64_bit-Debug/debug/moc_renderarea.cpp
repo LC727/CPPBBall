@@ -52,7 +52,11 @@ template <> constexpr inline auto RenderArea::qt_create_metaobjectdata<qt_meta_t
         "setAntialiased",
         "antialiased",
         "setTransformed",
-        "transformed"
+        "transformed",
+        "drawBall",
+        "QPainter*",
+        "painter",
+        "drawFrame"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -75,6 +79,14 @@ template <> constexpr inline auto RenderArea::qt_create_metaobjectdata<qt_meta_t
         // Slot 'setTransformed'
         QtMocHelpers::SlotData<void(bool)>(13, 2, QMC::AccessPublic, QMetaType::Void, {{
             { QMetaType::Bool, 14 },
+        }}),
+        // Slot 'drawBall'
+        QtMocHelpers::SlotData<void(QPainter *)>(15, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 16, 17 },
+        }}),
+        // Slot 'drawFrame'
+        QtMocHelpers::SlotData<void(QPainter *)>(18, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 16, 17 },
         }}),
     };
     QtMocHelpers::UintData qt_properties {
@@ -104,6 +116,8 @@ void RenderArea::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 2: _t->setBrush((*reinterpret_cast<std::add_pointer_t<QBrush>>(_a[1]))); break;
         case 3: _t->setAntialiased((*reinterpret_cast<std::add_pointer_t<bool>>(_a[1]))); break;
         case 4: _t->setTransformed((*reinterpret_cast<std::add_pointer_t<bool>>(_a[1]))); break;
+        case 5: _t->drawBall((*reinterpret_cast<std::add_pointer_t<QPainter*>>(_a[1]))); break;
+        case 6: _t->drawFrame((*reinterpret_cast<std::add_pointer_t<QPainter*>>(_a[1]))); break;
         default: ;
         }
     }
@@ -128,14 +142,14 @@ int RenderArea::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 7;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 5)
+        if (_id < 7)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 5;
+        _id -= 7;
     }
     return _id;
 }
