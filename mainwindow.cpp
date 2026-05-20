@@ -3,6 +3,9 @@
 #include <QPainter>
 #include <QGridLayout>
 #include <QTimer>
+#include <chrono>
+#include <ctime>
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -63,16 +66,22 @@ void MainWindow::brushChanged()
 }
 
 void MainWindow::step(){
-    model->step();
+    //auto start = std::chrono::system_clock::now();
+    model->oldStep();
     QPointF newPos = model->getBallPos();
-    printf("Setting ball position to: %i, %i\n",newPos.x(), newPos.y());
     renderArea->setBallPos(newPos.toPoint());
+    std::tuple<float, float, float> trajectoryParameters = model->getTrajectoryParameters();
+    renderArea->setTrajectoryParameters(trajectoryParameters);
     std::vector<QPointF> newVerticesF = model->getFrameVertices();
     std::vector<QPoint> newVertices;
     for (QPointF vertex : newVerticesF){
         newVertices.push_back(vertex.toPoint());
         }
     renderArea->setFrameVertices(newVertices);
+    /*auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    std::cout << elapsed_seconds.count() << std::endl;*/
+
 }
 
 MainWindow::~MainWindow()

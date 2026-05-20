@@ -20,6 +20,7 @@ public:
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
     void setBallPos(const QPoint newPos);
+    void setTrajectoryParameters(std::tuple<float, float, float> newTrajectoryParameters);
     void setFrameVertices(std::vector<QPoint> newVertices);
     void initialize(Model* model);
 
@@ -30,6 +31,7 @@ public slots:
     void setAntialiased(bool antialiased);
     void setTransformed(bool transformed);
     void drawBall(QPainter* painter);
+    void drawTrajectory(QPainter* painter);
     void drawFrame(QPainter* painter);
 
 protected:
@@ -44,6 +46,7 @@ private:
     QPixmap pixmap;
     QPoint ballPos;
     int ballRadius;
+    std::tuple<float, float, float> trajectoryParameters;
     std::vector<QPoint> frameVertices;
 };
 #endif // RENDERAREA_H
