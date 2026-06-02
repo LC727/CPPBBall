@@ -2,6 +2,7 @@
 #include "model.h"
 #include <stdexcept>
 #include <QPoint>
+#include <cmath>
 #include <iostream>
 
 Model::Model() {
@@ -49,18 +50,46 @@ std::tuple<float, float, float> Model::computeTrajectory(Ball* ball, int g) {
     return std::make_tuple(a, x0, b);
 }
 
-QPointF Model::ballPosFunction(qreal x){
+Ball* Model::ballFunction(qreal x){
     double a = std::get<0>(trajectoryParameters);
     double x0 = std::get<1>(trajectoryParameters);
     double b = std::get<2>(trajectoryParameters);
-    return(QPointF(x,a*std::pow(x-x0,2)+b));
+    int directionSign = ball->getVel().rx()/abs(ball->getVel().rx());
+    return(new Ball(QPointF(x,a*std::pow(x-x0,2)+b),QPointF(ball->getVel().rx(),2*a*(x-x0)*directionSign)));
 }
 
 void Model::step(){
     qreal newX = ball->getPos().rx() + ball->getVel().rx();
-    QPointF newPos = ballPosFunction(newX);
+    Ball* newBall = ballFunction(newX);
+    QPointF ballVel = newBall->getVel();
+    int radius = ball->getRadius();
+    QPointF newPos = newBall->getPos();
+    if ((newPos.ry()>height-radius and ballVel.ry()>0) or (newPos.ry()<radius and ballVel.ry()<0)){
+        std::cout << "top/bottom collision\n";
+        ballVel.setY(-ballVel.y());
+        if (newPos.y()>height-radius){
+            newPos.setY(2*(height-radius)-newPos.y());
+        } else{
+            newPos.setY(-newPos.y());
+        }
+        ballVel = ballVel*95/100;
+        trajectoryParameters = computeTrajectory(new Ball(newPos,ballVel,radius), gravity);
+    }
+    if ((newPos.rx()>width-radius and ballVel.rx()>0) or (newPos.rx()<radius and ballVel.rx()<0)){
+        std::cout << "side collision\n";
+        ballVel.setX(-ballVel.x());
+        if (newPos.x()>width-radius){
+            newPos.setX(2*(width-radius)-newPos.x());
+        } else{
+            newPos.setX(-newPos.x());
+        }
+        ballVel = ballVel*95/100;
+        trajectoryParameters = computeTrajectory(new Ball(newPos,ballVel,radius), gravity);
+    }
+    ball->setPos(newPos);
+    ball->setVel(ballVel);
+    delete newBall;
 }
-
 
 
 void Model::oldStep(){

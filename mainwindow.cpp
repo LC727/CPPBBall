@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&MainWindow::step));
     this->layout()->addWidget(renderArea);
     renderArea->update();
-    timer->start(17);
+    timer->start(200);
 }
 
 void MainWindow::shapeChanged()
@@ -67,7 +67,7 @@ void MainWindow::brushChanged()
 
 void MainWindow::step(){
     //auto start = std::chrono::system_clock::now();
-    model->oldStep();
+    model->step();
     QPointF newPos = model->getBallPos();
     renderArea->setBallPos(newPos.toPoint());
     std::tuple<float, float, float> trajectoryParameters = model->getTrajectoryParameters();

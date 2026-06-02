@@ -14,6 +14,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     model.cpp \
+    parabolictrajectory.cpp \
     renderarea.cpp
 
 HEADERS += \
@@ -21,6 +22,7 @@ HEADERS += \
     frame.h \
     mainwindow.h \
     model.h \
+    parabolictrajectory.h \
     renderarea.h
 
 FORMS += \

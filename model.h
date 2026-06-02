@@ -17,7 +17,7 @@ public:
 
 private:
     std::tuple<float, float, float> computeTrajectory(Ball* ball, int g);
-    QPointF ballPosFunction(qreal x);
+    Ball* ballFunction(qreal x);
     Ball* ball;
     Frame* frame;
     std::tuple<float, float, float> trajectoryParameters;
