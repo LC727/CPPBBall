@@ -2,19 +2,24 @@
 #define PARABOLICTRAJECTORY_H
 #include <vector>
 #include <QPointF>
-#include <tuple>
+
+struct PTParameters{
+    float a;
+    float x0;
+    float b;
+};
 
 class ParabolicTrajectory
 {
 public:
-    ParabolicTrajectory();
+    ParabolicTrajectory(float a, float x0, float b);
     std::vector<QPointF> getTrajectory();
 
 private:
     std::vector<QPointF> trajectory;
-    std::vector<QPointF> computeTrajectory;
-    std::tuple<float,float,float> trajectoryParameters;
-    std::tuple<float,float,float> computeTrajectoryParameters(QPointF ballPos, QPointF ballVel, int g);
+    std::vector<QPointF> computeTrajectory(float x1, float x2, int nsteps = 100);
+    PTParameters trajectoryParameters;
+    PTParameters computeTrajectoryParameters(QPointF ballPos, QPointF ballVel, int g);
 
 };
 
